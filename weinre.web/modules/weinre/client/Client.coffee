@@ -6,13 +6,13 @@
 # Copyright (c) 2010, 2011 IBM Corporation
 #---------------------------------------------------------------------------------
 
-Native            = require('../common/Native')
 IDLTools          = require('../common/IDLTools')
 Callback          = require('../common/Callback')
 Weinre            = require('../common/Weinre')
 MessageDispatcher = require('../common/MessageDispatcher')
 Binding           = require('../common/Binding')
 IDGenerator       = require('../common/IDGenerator')
+HookLib           = require('../common/HookLib')
 
 InspectorBackendImpl        = require('./InspectorBackendImpl')
 InspectorFrontendHostImpl   = require('./InspectorFrontendHostImpl')
@@ -110,10 +110,12 @@ module.exports = class Client
 
     #---------------------------------------------------------------------------
     cb_webSocketClosed: ->
-        Native.setTimeout (->
-            WebInspector.panels.remote.connectionClosed()
-            WebInspector.currentPanel = WebInspector.panels.remote
-        ), 1000
+
+        HookLib.ignoreHooks ->
+            setTimeout (->
+                WebInspector.panels.remote.connectionClosed()
+                WebInspector.currentPanel = WebInspector.panels.remote
+            ), 1000
 
     #---------------------------------------------------------------------------
     @main: ->

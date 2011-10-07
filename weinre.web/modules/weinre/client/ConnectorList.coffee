@@ -6,7 +6,8 @@
 # Copyright (c) 2010, 2011 IBM Corporation
 #---------------------------------------------------------------------------------
 
-dt = require('./DOMTemplates')
+dt      = require('./DOMTemplates')
+HookLib = require('../common/HookLib')
 
 #-------------------------------------------------------------------------------
 module.exports = class ConnectorList
@@ -81,9 +82,11 @@ module.exports = class ConnectorList
         else
             @setState element, "closed"
             element.addStyleClass "weinre-fade"
-            window.setTimeout (->
-                self._remove element
-            ), 5000
+
+            HookLib.ignoreHooks ->
+                window.setTimeout (->
+                    self._remove element
+                ), 5000
 
     #---------------------------------------------------------------------------
     _remove: (element) ->
